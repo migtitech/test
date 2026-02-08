@@ -1,0 +1,44 @@
+<%- include('../partials/header') %>
+
+<h1><%= question.title %></h1>
+<a href="/user/questions/<%= question.topic._id %>" class="btn btn-secondary btn-sm">&larr; Back</a>
+
+<div class="card" style="margin-top:1rem">
+  <div class="question-detail">
+    <span class="badge badge-points"><%= question.points %> pts</span>
+    <p><%= question.description %></p>
+  </div>
+
+  <% if (error) { %>
+    <div class="alert alert-error"><%= error %></div>
+    <% if (existing) { %>
+      <div class="code-block"><pre><%= existing.code %></pre></div>
+      <p>Status: <span class="badge badge-<%= existing.status %>"><%= existing.status %></span></p>
+    <% } %>
+  <% } else if (canResubmit) { %>
+    <div class="alert alert-error">Your previous submission was rejected. You can resubmit for half points (<%= Math.floor(question.points / 2) %> pts).</div>
+    <% if (existing) { %>
+      <p><strong>Previous code:</strong></p>
+      <div class="code-block"><pre><%= existing.code %></pre></div>
+    <% } %>
+    <h2>Resubmit Your Code</h2>
+    <form method="POST" action="/user/submit/<%= question._id %>">
+      <div class="form-group">
+        <label>Paste your updated code below</label>
+        <textarea name="code" rows="12" class="code-editor" placeholder="Paste your updated code here..." required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Resubmit (<%= Math.floor(question.points / 2) %> pts)</button>
+    </form>
+  <% } else { %>
+    <h2>Submit Your Code</h2>
+    <form method="POST" action="/user/submit/<%= question._id %>">
+      <div class="form-group">
+        <label>Paste your code below</label>
+        <textarea name="code" rows="12" class="code-editor" placeholder="Paste your code here..." required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  <% } %>
+</div>
+
+<%- include('../partials/footer') %>

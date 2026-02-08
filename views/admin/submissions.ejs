@@ -1,0 +1,39 @@
+<%- include('../partials/header') %>
+
+<h1>Submissions</h1>
+
+<div class="card">
+  <% if (submissions.length === 0) { %>
+    <p class="text-muted">No submissions yet.</p>
+  <% } %>
+  <% submissions.forEach(s => { %>
+  <div class="submission-item">
+    <div class="submission-header">
+      <div>
+        <strong><%= s.user ? s.user.name : 'Deleted User' %></strong>
+        <span class="text-muted"> submitted for </span>
+        <strong><%= s.question ? s.question.title : 'Deleted Question' %></strong>
+        <span class="badge badge-points"><%= s.question ? s.question.points : 0 %> pts</span>
+      </div>
+      <span class="badge badge-<%= s.status %>"><%= s.status %></span>
+    </div>
+    <div class="code-block"><pre><%= s.code %></pre></div>
+    <div class="submission-meta">
+      <small><%= s.createdAt.toLocaleString() %> <% if (s.isResubmission) { %><span class="badge badge-pending">Resubmission</span><% } %></small>
+      <div>
+        <a href="/admin/submissions/<%= s._id %>" class="btn btn-secondary btn-sm">View & Chat</a>
+        <% if (s.status === 'pending') { %>
+        <form method="POST" action="/admin/submissions/approve/<%= s._id %>" style="display:inline">
+          <button type="submit" class="btn btn-success btn-sm">Approve</button>
+        </form>
+        <form method="POST" action="/admin/submissions/reject/<%= s._id %>" style="display:inline">
+          <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+        </form>
+        <% } %>
+      </div>
+    </div>
+  </div>
+  <% }) %>
+</div>
+
+<%- include('../partials/footer') %>

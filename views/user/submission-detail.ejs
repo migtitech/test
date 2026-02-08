@@ -1,0 +1,74 @@
+<%- include('../partials/header') %>
+
+<h1>My Submission</h1>
+<a href="/user/questions/<%= submission.question.topic %>" class="btn btn-secondary btn-sm">&larr; Back</a>
+
+<div class="card" style="margin-top:1rem">
+  <div class="submission-header">
+    <div>
+      <strong><%= submission.question.title %></strong>
+      <span class="badge badge-points"><%= submission.effectivePoints || submission.question.points %> pts</span>
+      <% if (submission.isResubmission) { %><span class="badge badge-pending">Resubmission (half pts)</span><% } %>
+    </div>
+    <span class="badge badge-<%= submission.status %>"><%= submission.status %></span>
+  </div>
+
+  <div class="code-block"><pre><%= submission.code %></pre></div>
+</div>
+
+<div class="card">
+  <h2>Chat with Admin</h2>
+  <div id="chatBox" class="chat-box">
+    <% chats.forEach(c => { %>
+    <div class="chat-msg chat-<%= c.senderRole %>">
+      <strong><%= c.sender %></strong>
+      <p><%= c.message %></p>
+      <small><%= c.createdAt.toLocaleString() %></small>
+    </div>
+    <% }) %>
+  </div>
+  <div class="chat-input">
+    <input type="text" id="chatInput" placeholder="Type a message..." autocomplete="off">
+    <button id="sendBtn" class="btn btn-primary">Send</button>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+  const submissionId = '<%= submission._id %>';
+  socket.emit('joinSubmission', submissionId);
+
+  const chatBox = document.getElementById('chatBox');
+  const chatInput = document.getElementById('chatInput');
+  const sendBtn = document.getElementById('sendBtn');
+
+  function addMessage(data) {
+    const div = document.createElement('div');
+    div.className = 'chat-msg chat-' + data.senderRole;
+    div.innerHTML = '<strong>' + data.sender + '</strong><p>' + data.message + '</p><small>' + new Date(data.createdAt).toLocaleString() + '</small>';
+    chatBox.appendChild(div);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  socket.on('newMessage', addMessage);
+
+  function sendMessage() {
+    const msg = chatInput.value.trim();
+    if (!msg) return;
+    socket.emit('chatMessage', {
+      submissionId: submissionId,
+      sender: '<%= currentUser.name %>',
+      senderRole: 'user',
+      message: msg
+    });
+    chatInput.value = '';
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  chatInput.addEventListener('keypress', function(e) { if (e.key === 'Enter') sendMessage(); });
+
+  chatBox.scrollTop = chatBox.scrollHeight;
+</script>
+
+<%- include('../partials/footer') %>

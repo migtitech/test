@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MyCrud - Code Challenge</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <% if (currentUser) { %>
+  <nav class="navbar">
+    <div class="nav-brand">MyCrud</div>
+    <div class="nav-links">
+      <% if (currentUser.role === 'admin') { %>
+        <a href="/admin">Dashboard</a>
+        <a href="/admin/users">Users</a>
+        <a href="/admin/topics">Topics</a>
+        <a href="/admin/submissions">Submissions <% if (badges.pendingSubmissions) { %><span class="nav-badge"><%= badges.pendingSubmissions %></span><% } %></a>
+        <a href="/admin/claims">Claims <% if (badges.pendingClaims) { %><span class="nav-badge"><%= badges.pendingClaims %></span><% } %></a>
+        <a href="/admin/transactions">Transactions</a>
+      <% } else { %>
+        <a href="/user">Dashboard</a>
+        <a href="/user/topics">Topics</a>
+        <a href="/user/wallet">Wallet <% if (badges.wallet) { %><span class="nav-badge wallet-badge"><%= badges.wallet %></span><% } %></a>
+        <a href="/user/transactions">History <% if (badges.pendingSubmissions) { %><span class="nav-badge"><%= badges.pendingSubmissions %></span><% } %></a>
+        <a href="/user/settings">Settings</a>
+      <% } %>
+      <a href="/logout" class="btn-logout">Logout</a>
+    </div>
+  </nav>
+  <% } %>
+  <div class="container">

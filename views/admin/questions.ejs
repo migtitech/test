@@ -1,0 +1,45 @@
+<%- include('../partials/header') %>
+
+<h1>Questions - <%= topic.title %></h1>
+<a href="/admin/topics" class="btn btn-secondary btn-sm">&larr; Back to Topics</a>
+
+<div class="card" style="margin-top:1rem">
+  <h2>Add Question</h2>
+  <form method="POST" action="/admin/questions/create">
+    <input type="hidden" name="topic" value="<%= topic._id %>">
+    <div class="form-group">
+      <label>Title</label>
+      <input type="text" name="title" placeholder="Question title" required>
+    </div>
+    <div class="form-group">
+      <label>Description</label>
+      <textarea name="description" rows="4" placeholder="Question description / problem statement" required></textarea>
+    </div>
+    <div class="form-group">
+      <label>Points</label>
+      <input type="number" name="points" placeholder="Points" min="1" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Question</button>
+  </form>
+</div>
+
+<div class="card">
+  <h2>All Questions (<%= questions.length %>)</h2>
+  <% if (questions.length === 0) { %>
+    <p class="text-muted">No questions yet. Add one above.</p>
+  <% } %>
+  <% questions.forEach(q => { %>
+  <div class="question-item">
+    <div class="question-header">
+      <h3><%= q.title %></h3>
+      <span class="badge badge-points"><%= q.points %> pts</span>
+    </div>
+    <p><%= q.description %></p>
+    <form method="POST" action="/admin/questions/delete/<%= q._id %>" style="display:inline" onsubmit="return confirm('Delete this question?')">
+      <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+    </form>
+  </div>
+  <% }) %>
+</div>
+
+<%- include('../partials/footer') %>

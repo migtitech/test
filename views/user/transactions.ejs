@@ -1,0 +1,33 @@
+<%- include('../partials/header') %>
+
+<h1>Transaction History</h1>
+
+<div class="card">
+  <% if (transactions.length === 0) { %>
+    <p class="text-muted">No transactions yet.</p>
+  <% } %>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Amount</th>
+        <th>Description</th>
+        <th>Status</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% transactions.forEach(t => { %>
+      <tr>
+        <td><span class="badge badge-type-<%= t.type %>"><%= t.type.replace(/_/g, ' ') %></span></td>
+        <td><%= t.type === 'earned' ? '+' : '-' %><%= t.amount %> pts</td>
+        <td><%= t.description %></td>
+        <td><span class="badge badge-<%= t.status %>"><%= t.status %></span></td>
+        <td><%= t.createdAt.toLocaleString() %></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('../partials/footer') %>

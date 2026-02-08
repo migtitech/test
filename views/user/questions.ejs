@@ -1,0 +1,36 @@
+<%- include('../partials/header') %>
+
+<h1><%= topic.title %></h1>
+<a href="/user/topics" class="btn btn-secondary btn-sm">&larr; Back to Topics</a>
+
+<div class="questions-list" style="margin-top:1rem">
+  <% if (questions.length === 0) { %>
+    <p class="text-muted">No questions in this topic yet.</p>
+  <% } %>
+  <% questions.forEach(q => { %>
+  <div class="question-card">
+    <div class="question-header">
+      <h3><%= q.title %></h3>
+      <span class="badge badge-points"><%= q.points %> pts</span>
+    </div>
+    <% if (submittedMap[q._id.toString()]) { %>
+      <div class="question-status">
+        <span class="badge badge-<%= submittedMap[q._id.toString()] %>"><%= submittedMap[q._id.toString()] %></span>
+        <% if (submittedMap[q._id.toString()] === 'rejected') { %>
+          <a href="/user/solve/<%= q._id %>" class="btn btn-primary btn-sm">Resubmit (<%= Math.floor(q.points / 2) %> pts)</a>
+        <% } %>
+        <% if (submissionIdMap[q._id.toString()]) { %>
+          <a href="/user/submission/<%= submissionIdMap[q._id.toString()] %>" class="btn btn-secondary btn-sm">View & Chat</a>
+        <% } %>
+      </div>
+    <% } else { %>
+      <div class="question-status">
+        <span class="lock-icon">&#x1F512;</span>
+        <a href="/user/solve/<%= q._id %>" class="btn btn-primary btn-sm">Open & Solve</a>
+      </div>
+    <% } %>
+  </div>
+  <% }) %>
+</div>
+
+<%- include('../partials/footer') %>

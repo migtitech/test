@@ -1,0 +1,19 @@
+<%- include('../partials/header') %>
+
+<h1>Topics</h1>
+
+<div class="topic-grid">
+  <% topics.forEach(t => { %>
+  <div class="topic-card">
+    <h3><%= t.title %></h3>
+    <p><%= topicQuestionCounts[t._id] || 0 %> questions</p>
+    <a href="/user/questions/<%= t._id %>" class="btn btn-primary btn-sm">View Questions</a>
+  </div>
+  <% }) %>
+</div>
+
+<% if (topics.length === 0) { %>
+  <p class="text-muted">No topics available yet.</p>
+<% } %>
+
+<%- include('../partials/footer') %>

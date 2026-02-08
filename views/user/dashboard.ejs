@@ -1,0 +1,23 @@
+<%- include('../partials/header') %>
+
+<h1>Welcome, <%= user.name %></h1>
+<div class="stats-grid">
+  <div class="stat-card">
+    <h3><%= user.wallet %></h3>
+    <p>Wallet Points</p>
+  </div>
+  <div class="stat-card">
+    <h3><%= totalSubmissions %></h3>
+    <p>Total Submissions</p>
+  </div>
+  <div class="stat-card">
+    <h3><%= approvedSubmissions %></h3>
+    <p>Approved</p>
+  </div>
+  <div class="stat-card">
+    <h3><%= pendingSubmissions %></h3>
+    <p>Pending</p>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

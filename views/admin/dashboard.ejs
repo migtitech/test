@@ -1,0 +1,27 @@
+<%- include('../partials/header') %>
+
+<h1>Admin Dashboard</h1>
+<div class="stats-grid">
+  <div class="stat-card">
+    <h3><%= totalUsers %></h3>
+    <p>Total Users</p>
+  </div>
+  <div class="stat-card">
+    <h3><%= totalTopics %></h3>
+    <p>Topics</p>
+  </div>
+  <div class="stat-card">
+    <h3><%= totalQuestions %></h3>
+    <p>Questions</p>
+  </div>
+  <div class="stat-card highlight">
+    <h3><%= pendingSubmissions %></h3>
+    <p>Pending Submissions</p>
+  </div>
+  <div class="stat-card highlight">
+    <h3><%= pendingClaims %></h3>
+    <p>Pending Claims</p>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

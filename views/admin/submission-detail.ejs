@@ -1,0 +1,87 @@
+<%- include('../partials/header') %>
+
+<h1>Submission Detail</h1>
+<a href="/admin/submissions" class="btn btn-secondary btn-sm">&larr; Back to Submissions</a>
+
+<div class="card" style="margin-top:1rem">
+  <div class="submission-header">
+    <div>
+      <strong><%= submission.user ? submission.user.name : 'Deleted User' %></strong>
+      <span class="text-muted"> submitted for </span>
+      <strong><%= submission.question ? submission.question.title : 'Deleted Question' %></strong>
+      <span class="badge badge-points"><%= submission.effectivePoints || (submission.question ? submission.question.points : 0) %> pts</span>
+      <% if (submission.isResubmission) { %><span class="badge badge-pending">Resubmission (half pts)</span><% } %>
+    </div>
+    <span class="badge badge-<%= submission.status %>"><%= submission.status %></span>
+  </div>
+
+  <div class="code-block"><pre><%= submission.code %></pre></div>
+
+  <% if (submission.status === 'pending') { %>
+  <div style="margin-top:1rem;display:flex;gap:0.5rem">
+    <form method="POST" action="/admin/submissions/approve/<%= submission._id %>">
+      <button type="submit" class="btn btn-success">Approve</button>
+    </form>
+    <form method="POST" action="/admin/submissions/reject/<%= submission._id %>">
+      <button type="submit" class="btn btn-danger">Reject</button>
+    </form>
+  </div>
+  <% } %>
+</div>
+
+<div class="card">
+  <h2>Chat</h2>
+  <div id="chatBox" class="chat-box">
+    <% chats.forEach(c => { %>
+    <div class="chat-msg chat-<%= c.senderRole %>">
+      <strong><%= c.sender %></strong>
+      <p><%= c.message %></p>
+      <small><%= c.createdAt.toLocaleString() %></small>
+    </div>
+    <% }) %>
+  </div>
+  <div class="chat-input">
+    <input type="text" id="chatInput" placeholder="Type a message..." autocomplete="off">
+    <button id="sendBtn" class="btn btn-primary">Send</button>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+  const submissionId = '<%= submission._id %>';
+  socket.emit('joinSubmission', submissionId);
+
+  const chatBox = document.getElementById('chatBox');
+  const chatInput = document.getElementById('chatInput');
+  const sendBtn = document.getElementById('sendBtn');
+
+  function addMessage(data) {
+    const div = document.createElement('div');
+    div.className = 'chat-msg chat-' + data.senderRole;
+    div.innerHTML = '<strong>' + data.sender + '</strong><p>' + data.message + '</p><small>' + new Date(data.createdAt).toLocaleString() + '</small>';
+    chatBox.appendChild(div);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  socket.on('newMessage', addMessage);
+
+  function sendMessage() {
+    const msg = chatInput.value.trim();
+    if (!msg) return;
+    socket.emit('chatMessage', {
+      submissionId: submissionId,
+      sender: 'Admin',
+      senderRole: 'admin',
+      message: msg
+    });
+    chatInput.value = '';
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  chatInput.addEventListener('keypress', function(e) { if (e.key === 'Enter') sendMessage(); });
+
+  chatBox.scrollTop = chatBox.scrollHeight;
+</script>
+
+<%- include('../partials/footer') %>

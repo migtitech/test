@@ -1,0 +1,42 @@
+<%- include('../partials/header') %>
+
+<h1>My Wallet</h1>
+
+<div class="card wallet-card">
+  <h2>Balance: <span class="wallet-balance"><%= user.wallet %> pts</span></h2>
+  <form method="POST" action="/user/claim" class="form-inline">
+    <input type="number" name="amount" placeholder="Points to claim" min="1" max="<%= user.wallet %>" required>
+    <button type="submit" class="btn btn-primary" <%= user.wallet <= 0 ? 'disabled' : '' %>>Claim Points</button>
+  </form>
+</div>
+
+<div class="card">
+  <h2>Recent Transactions</h2>
+  <% if (transactions.length === 0) { %>
+    <p class="text-muted">No transactions yet.</p>
+  <% } %>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Amount</th>
+        <th>Description</th>
+        <th>Status</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% transactions.forEach(t => { %>
+      <tr>
+        <td><span class="badge badge-type-<%= t.type %>"><%= t.type.replace(/_/g, ' ') %></span></td>
+        <td><%= t.type === 'earned' ? '+' : '-' %><%= t.amount %> pts</td>
+        <td><%= t.description %></td>
+        <td><span class="badge badge-<%= t.status %>"><%= t.status %></span></td>
+        <td><%= t.createdAt.toLocaleString() %></td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<%- include('../partials/footer') %>

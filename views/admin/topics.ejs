@@ -1,0 +1,31 @@
+<%- include('../partials/header') %>
+
+<h1>Topics</h1>
+
+<div class="card">
+  <h2>Create New Topic</h2>
+  <form method="POST" action="/admin/topics/create" class="form-inline">
+    <input type="text" name="title" placeholder="Topic title" required>
+    <button type="submit" class="btn btn-primary">Add Topic</button>
+  </form>
+</div>
+
+<div class="card">
+  <h2>All Topics</h2>
+  <div class="topic-grid">
+    <% topics.forEach(t => { %>
+    <div class="topic-card">
+      <h3><%= t.title %></h3>
+      <p><%= topicQuestionCounts[t._id] || 0 %> questions</p>
+      <div class="topic-actions">
+        <a href="/admin/questions/<%= t._id %>" class="btn btn-primary btn-sm">Manage Questions</a>
+        <form method="POST" action="/admin/topics/delete/<%= t._id %>" style="display:inline" onsubmit="return confirm('Delete this topic and all its questions?')">
+          <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+        </form>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
