@@ -132,3 +132,95 @@ h1 { margin-bottom: 0.5rem; }
 .chat-input { display: flex; gap: 0.5rem; }
 .chat-input input { flex: 1; padding: 0.6rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem; }
 .chat-input button { white-space: nowrap; }
+
+/* Hamburger toggle - hidden on desktop */
+.nav-toggle { display: none; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; padding: 0.2rem 0.5rem; }
+
+/* Table responsive wrapper */
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* ====== Mobile Responsive ====== */
+@media (max-width: 768px) {
+  /* Navbar */
+  .navbar { flex-wrap: wrap; padding: 0.6rem 1rem; }
+  .nav-brand { font-size: 1.1rem; }
+  .nav-toggle { display: block; }
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    gap: 0;
+    padding-top: 0.5rem;
+  }
+  .nav-links.open { display: flex; }
+  .nav-links a {
+    padding: 0.6rem 0.4rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 0.85rem;
+  }
+
+  /* Container */
+  .container { padding: 1rem 0.75rem; }
+
+  /* Stats */
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 0.6rem; }
+  .stat-card { padding: 1rem; }
+  .stat-card h3 { font-size: 1.5rem; }
+
+  /* Topics */
+  .topic-grid { grid-template-columns: 1fr; }
+  .topic-actions { flex-wrap: wrap; }
+
+  /* Cards */
+  .card { padding: 1rem; }
+
+  /* Forms */
+  .form-inline { flex-direction: column; align-items: stretch; }
+  .form-inline input { width: 100%; }
+  .form-inline button { width: 100%; }
+
+  /* Auth */
+  .auth-container { margin: 1.5rem auto; padding: 1.5rem; }
+
+  /* Questions */
+  .question-header { flex-direction: column; align-items: flex-start; gap: 0.3rem; }
+  .question-status { flex-wrap: wrap; gap: 0.5rem; }
+
+  /* Submissions */
+  .submission-header { flex-direction: column; align-items: flex-start; gap: 0.4rem; }
+  .submission-meta { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+  .submission-meta div { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+  /* Tables - horizontal scroll */
+  table { display: block; overflow-x: auto; white-space: nowrap; }
+  th, td { padding: 0.5rem; font-size: 0.8rem; }
+
+  /* Code */
+  .code-block { padding: 0.7rem; }
+  .code-block pre { font-size: 0.75rem; }
+  .code-editor { font-size: 0.8rem; }
+
+  /* Chat */
+  .chat-msg { max-width: 90%; }
+  .chat-box { max-height: 300px; padding: 0.7rem; }
+
+  /* Wallet */
+  .wallet-balance { font-size: 1.5rem; }
+  .wallet-card .form-inline { flex-direction: row; flex-wrap: wrap; }
+
+  /* Buttons */
+  .btn { padding: 0.5rem 1rem; font-size: 0.85rem; }
+  .btn-sm { padding: 0.3rem 0.6rem; font-size: 0.75rem; }
+
+  /* Headings */
+  h1 { font-size: 1.3rem; }
+  h2 { font-size: 1rem; }
+}
+
+@media (max-width: 480px) {
+  .stats-grid { grid-template-columns: 1fr; }
+  .stat-card h3 { font-size: 1.3rem; }
+  .nav-brand { font-size: 0.95rem; }
+  .badge { font-size: 0.65rem; padding: 0.15rem 0.4rem; }
+  h1 { font-size: 1.1rem; }
+}
