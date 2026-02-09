@@ -9,6 +9,8 @@ const Submission = require('../models/Submission');
 const Transaction = require('../models/Transaction');
 const Chat = require('../models/Chat');
 
+const PER_PAGE = 10;
+
 router.use(isUser);
 
 // Dashboard
@@ -22,18 +24,24 @@ router.get('/', async (req, res) => {
 
 // Topics list
 router.get('/topics', async (req, res) => {
-  const topics = await Topic.find().sort('-createdAt');
+  const page = parseInt(req.query.page) || 1;
+  const total = await Topic.countDocuments();
+  const totalPages = Math.ceil(total / PER_PAGE);
+  const topics = await Topic.find().sort('-createdAt').skip((page - 1) * PER_PAGE).limit(PER_PAGE);
   const topicQuestionCounts = {};
   for (const t of topics) {
     topicQuestionCounts[t._id] = await Question.countDocuments({ topic: t._id });
   }
-  res.render('user/topics', { topics, topicQuestionCounts });
+  res.render('user/topics', { topics, topicQuestionCounts, currentPage: page, totalPages });
 });
 
 // Questions in a topic
 router.get('/questions/:topicId', async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
   const topic = await Topic.findById(req.params.topicId);
-  const questions = await Question.find({ topic: req.params.topicId }).sort('-createdAt');
+  const total = await Question.countDocuments({ topic: req.params.topicId });
+  const totalPages = Math.ceil(total / PER_PAGE);
+  const questions = await Question.find({ topic: req.params.topicId }).sort('-createdAt').skip((page - 1) * PER_PAGE).limit(PER_PAGE);
 
   // Check which questions user has already submitted
   const submissions = await Submission.find({
@@ -47,7 +55,7 @@ router.get('/questions/:topicId', async (req, res) => {
     submissionIdMap[s.question.toString()] = s._id;
   });
 
-  res.render('user/questions', { topic, questions, submittedMap, submissionIdMap });
+  res.render('user/questions', { topic, questions, submittedMap, submissionIdMap, currentPage: page, totalPages });
 });
 
 // Solve a question (editor page)
@@ -108,9 +116,12 @@ router.get('/submission/:id', async (req, res) => {
 
 // Wallet
 router.get('/wallet', async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
   const user = await User.findById(req.session.user._id);
-  const transactions = await Transaction.find({ user: user._id }).sort('-createdAt');
-  res.render('user/wallet', { user, transactions });
+  const total = await Transaction.countDocuments({ user: user._id });
+  const totalPages = Math.ceil(total / PER_PAGE);
+  const transactions = await Transaction.find({ user: user._id }).sort('-createdAt').skip((page - 1) * PER_PAGE).limit(PER_PAGE);
+  res.render('user/wallet', { user, transactions, currentPage: page, totalPages });
 });
 
 // Claim points
@@ -160,8 +171,11 @@ router.post('/settings/password', async (req, res) => {
 
 // Transaction history
 router.get('/transactions', async (req, res) => {
-  const transactions = await Transaction.find({ user: req.session.user._id }).sort('-createdAt');
-  res.render('user/transactions', { transactions });
+  const page = parseInt(req.query.page) || 1;
+  const total = await Transaction.countDocuments({ user: req.session.user._id });
+  const totalPages = Math.ceil(total / PER_PAGE);
+  const transactions = await Transaction.find({ user: req.session.user._id }).sort('-createdAt').skip((page - 1) * PER_PAGE).limit(PER_PAGE);
+  res.render('user/transactions', { transactions, currentPage: page, totalPages });
 });
 
 module.exports = router;

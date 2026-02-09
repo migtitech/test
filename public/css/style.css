@@ -133,6 +133,13 @@ h1 { margin-bottom: 0.5rem; }
 .chat-input input { flex: 1; padding: 0.6rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9rem; }
 .chat-input button { white-space: nowrap; }
 
+/* Pagination */
+.pagination { display: flex; justify-content: center; align-items: center; gap: 0.3rem; margin-top: 1.5rem; flex-wrap: wrap; }
+.page-link { padding: 0.4rem 0.75rem; border: 1px solid #ddd; border-radius: 4px; text-decoration: none; color: #4361ee; font-size: 0.85rem; transition: all 0.2s; }
+.page-link:hover { background: #4361ee; color: #fff; border-color: #4361ee; }
+.page-link.active { background: #4361ee; color: #fff; border-color: #4361ee; pointer-events: none; }
+.page-link.dots { border: none; pointer-events: none; color: #999; padding: 0.4rem 0.3rem; }
+
 /* Hamburger toggle - hidden on desktop */
 .nav-toggle { display: none; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; padding: 0.2rem 0.5rem; }
 
